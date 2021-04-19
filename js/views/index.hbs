@@ -1,0 +1,8 @@
+<form action="/quotation/add-item" method="post">
+	<button name="item" value="KEYBOARD" type="submit">KEYBOARD</button>
+	<button name="item" value="MOUSE" type="submit">MOUSE</button>
+</form>
+
+{{#each quotation}}
+	{{this.item}} X {{this.quantity}}
+{{/each}}

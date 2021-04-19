@@ -1,32 +1,37 @@
-const { expect } = require("chai");
-const { makeAddItem, makeNewQuotation, makeListItems } = require("../../lib/use-cases/quotation-use-cases");
+const {expect} = require('chai');
 const quotations = require('../../lib/infrastructure/persistence/fake/fake-quotations');
+const { makeNewQuotationUseCase, makeAddQuotationItemUseCase, makeListQuotationItems } = require('../../lib/use-cases/quotation-use-cases');
 
 describe('Quotation use cases', () => {
-	it('Should add Items', () => {
-		const newQuotation = makeNewQuotation(quotations);
-		const quotationId = newQuotation();
-		const addItem = makeAddItem(quotations);
-		addItem(quotationId, 'KEYBOARD');
-		const listItems = makeListItems(quotations);
-		const items = listItems(quotationId);
-		const expected = [{item: 'KEYBOARD', quantity: 1}];
-		expect(items).deep.equals(expected);
-	});
+	describe('add items', () => {
+		beforeEach(() => {
+			this.quotations = quotations;
+			this.newQuotation = makeNewQuotationUseCase(quotations);
+			this.addQuotationItem = makeAddQuotationItemUseCase(quotations);
+			this.listQuotationItems = makeListQuotationItems(quotations);
+			
+		});
+		afterEach(() => {
+			this.quotations.clear();
+		});
+		it('should add to empty quotation', async() => {
+			const quotationId = await this.newQuotation();
+			await this.addQuotationItem(quotationId, 'KEYBOARD');
+			const items = await this.listQuotationItems(quotationId);
+			const expected = [{'item': 'KEYBOARD', 'quantity': 1}];
+			expect(items).deep.equal(expected);
+		});
 
-	it('should aggregate items quantity', () => {
-		const newQuotation = makeNewQuotation(quotations);
-		const quotationId = newQuotation();
-		const addItem = makeAddItem(quotations);
-		addItem(quotationId, 'KEYBOARD');
-		addItem(quotationId, 'MONITOR');
-		addItem(quotationId, 'KEYBOARD');
-		const listItems = makeListItems(quotations);
-		const items = listItems(quotationId);
-		const expected = [
-			{item: 'KEYBOARD', quantity: 2}, 
-			{item: 'MONITOR', quantity: 1}
-		];
-		expect(items).deep.equals(expected);
+		it('should aggregate quantities', async () => {
+			const quotationId = await this.newQuotation();
+			this.addQuotationItem(quotationId, 'KEYBOARD');
+			this.addQuotationItem(quotationId, 'MONITOR');
+			this.addQuotationItem(quotationId, 'MONITOR');
+
+			const items = await this.listQuotationItems(quotationId);
+
+			const expected = [{'item': 'KEYBOARD', 'quantity': 1}, {'item': 'MONITOR', 'quantity': 2}];
+			expect(items).to.deep.eq(expected);
+		});
 	});
 });

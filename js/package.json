@@ -1,19 +1,31 @@
 {
-  "name": "js-test-clean-architecture",
+  "name": "test-driven-js-architecture",
   "version": "1.0.0",
-  "description": "Quotations:",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "test:acceptance": "mocha test/use-cases --recursive",
-    "test:micro": "mocha test/domain --recursive",
-    "test:contract": "mocha test/infrastructure --recursive",
-    "test": "npm run test:micro && npm run test:contract && npm run test:acceptance"
+    "test:acceptance": "mocha --recursive test/use-cases",
+    "test:micro": "mocha --recursive test/domain",
+    "test:contract": "mocha --recursive test/infrastructure/persistence/fake",
+    "test:prisma": "mocha --recursive test/infrastructure/persistence/prisma",
+    "test": "npm run test:acceptance && npm run test:micro && npm run test:contract && npm run test:prisma",
+    "start": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "chai": "^4.3.4",
-    "mocha": "^8.3.2"
+    "mocha": "^8.3.2",
+    "nodemon": "^2.0.7",
+    "playwright": "^1.10.0",
+    "prisma": "^2.21.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^2.21.0",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "hbs": "^4.1.1"
   }
 }
