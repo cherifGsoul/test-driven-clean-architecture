@@ -1,0 +1,19 @@
+{
+  "name": "js-test-clean-architecture",
+  "version": "1.0.0",
+  "description": "Quotations:",
+  "main": "index.js",
+  "scripts": {
+    "test:acceptance": "mocha test/use-cases --recursive",
+    "test:micro": "mocha test/domain --recursive",
+    "test:contract": "mocha test/infrastructure --recursive",
+    "test": "npm run test:micro && npm run test:contract && npm run test:acceptance"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "mocha": "^8.3.2"
+  }
+}
