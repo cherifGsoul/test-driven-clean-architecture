@@ -10,12 +10,8 @@ const express = require('express');
 const { makeProductsRouter, makeAddItem } = require("../lib/infrastructure/web/express/quotation-handlers");
 const router = express.Router();
 
-const newQuotation = makeNewQuotationUseCase(quotations);
-const addQuotationItem = makeAddQuotationItemUseCase(quotations);
-const listQuotationItems = makeListQuotationItems(quotations);
-
-router.get('/products', makeProductsRouter(listQuotationItems));
-router.post('/add-item', makeAddItem(newQuotation, addQuotationItem));
+router.get('/products', makeProductsRouter(makeListQuotationItems(quotations)));
+router.post('/add-item', makeAddItem(makeNewQuotationUseCase(quotations), makeAddQuotationItemUseCase(quotations)));
 
 module.exports = router;
 
